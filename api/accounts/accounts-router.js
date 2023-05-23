@@ -1,4 +1,5 @@
 const router = require('express').Router()
+const middleware = require('./accounts-middleware')
 
 router.get('/', (req, res, next) => {
   // DO YOUR MAGIC
@@ -9,7 +10,7 @@ res.json([{},{}])
   }
 })
 
-router.get('/:id', (req, res, next) => {
+router.get('/:id', middleware.checkAccountId, (req, res, next) => {
   // DO YOUR MAGIC
   try{
 res.json('get accounts by id')
@@ -18,7 +19,10 @@ res.json('get accounts by id')
   }
 })
 
-router.post('/', (req, res, next) => {
+router.post('/', 
+middleware.checkAccountPayload,
+ middleware.checkAccountNameUnique,
+  (req, res, next) => {
   // DO YOUR MAGIC
   try{
 res.json(' POST get accounts')
@@ -27,7 +31,11 @@ res.json(' POST get accounts')
   }
 })
 
-router.put('/:id', (req, res, next) => {
+router.put('/:id',
+ middleware.checkAccountId,
+  middleware.checkAccountPayload,
+  middleware.checkAccountNameUnique,
+  (req, res, next) => {
   // DO YOUR MAGIC
   try{
 res.json('PUT get accounts')
@@ -36,7 +44,8 @@ res.json('PUT get accounts')
   }
 });
 
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id', middleware.checkAccountId,
+(req, res, next) => {
   // DO YOUR MAGIC
   try{
 res.json(' DELETE get accounts')
